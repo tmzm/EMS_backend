@@ -1,24 +1,13 @@
 #!/usr/bin/env bash
 echo "Running composer"
-#composer install --no-dev --working-dir=/var/www/html
-composer update
+composer global require hirak/prestissimo
+composer install --no-dev --working-dir=/var/www/html
 
-echo "Clear..."
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-php artisan clear
+echo "generating application key..."
+php artisan key:generate --show
 
 echo "Caching config..."
 php artisan config:cache
 
 echo "Caching routes..."
 php artisan route:cache
-
-php artisan key:generate --show
-
-#echo "Running migrations..."
-#php artisan migrate:fresh --force --seed
-
-#echo "passport..."
-#php artisan passport:client --personal
