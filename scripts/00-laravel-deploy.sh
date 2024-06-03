@@ -22,4 +22,4 @@ echo "Running app..."
 php artisan serve --host 0.0.0.0 --port 10000
 
 echo "Running passport..."
-php passport client --personal
+php artisan passport:client --personal
