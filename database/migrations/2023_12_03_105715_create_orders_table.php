@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->boolean('accepted_by_user')->default(true);
             $table->boolean('is_prescription')->default(false);
-            $table->foreignId('location_id')->nullable()->constrained()->nullOnDelete();
+//            $table->foreignId('location_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
