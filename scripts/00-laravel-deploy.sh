@@ -17,3 +17,6 @@ php artisan route:cache
 
 echo "Running migrations..."
 php artisan migrate:fresh --force --seed
+
+echo "passport..."
+php artisan passport:client --personal
