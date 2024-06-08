@@ -31,7 +31,7 @@ CREATE DATABASE EMS_database;
 
 ### 3. Configure Environment
 
-In the project, create a new file named `.env` and copy everything from `.env.example` to .env.
+In the project, create a new file named `.env` and copy everything from `.env.example` to `.env`.
 
 ### 4. Clone the Repository
 
