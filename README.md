@@ -45,7 +45,7 @@ git clone https://github.com/tmzm/EMS_backend
 
 Navigate to the root folder of the project and run the following commands in order (make sure Xampp is running):
 
-```php
+```laravel
 composer install
 php artisan passport:install
 php artisan migrate –seed
@@ -58,7 +58,7 @@ These commands are necessary to set up the project for the first time.
 
 Every time you want to run this project (always ensure Xampp is running), use the command:
 
-```php
+```laravel
 php artisan serve
 ```
 
