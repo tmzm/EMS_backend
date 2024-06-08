@@ -48,8 +48,8 @@ Navigate to the root folder of the project and run the following commands in ord
 ```laravel
 composer install
 php artisan passport:install
-php artisan migrate –seed
-php artisan passport:client –personal
+php artisan migrate –-seed
+php artisan passport:client -–personal
 ```
 
 These commands are necessary to set up the project for the first time.
