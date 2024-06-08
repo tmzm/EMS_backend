@@ -25,7 +25,7 @@ mysql -u root -p
 
 When prompted for a password, simply press Enter without typing anything. Then run:
 
-```bash
+```mysql
 CREATE DATABASE EMS_database;
 ```
 
@@ -37,7 +37,7 @@ In the project, create a new file named `.env` and copy everything from `.env.ex
 
 Run this command in the terminal to clone the repository to your PC:
 
-```bash
+```git
 git clone https://github.com/tmzm/EMS_backend
 ```
 
@@ -45,7 +45,7 @@ git clone https://github.com/tmzm/EMS_backend
 
 Navigate to the root folder of the project and run the following commands in order (make sure Xampp is running):
 
-```bash
+```php
 composer install
 php artisan passport:install
 php artisan migrate –seed
@@ -58,7 +58,7 @@ These commands are necessary to set up the project for the first time.
 
 Every time you want to run this project (always ensure Xampp is running), use the command:
 
-```bash
+```php
 php artisan serve
 ```
 
