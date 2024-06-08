@@ -48,7 +48,7 @@ Navigate to the root folder of the project and run the following commands in ord
 ```laravel
 composer install
 php artisan passport:install
-php artisan migrate –-seed
+php artisan migrate
 php artisan passport:client -–personal
 ```
 
