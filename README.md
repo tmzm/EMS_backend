@@ -65,8 +65,6 @@ Navigate to the root folder of the project and run the following commands in ord
 
 ```laravel
 composer install
-php artisan passport:install
-// Enter no if it asked for run pending migrations
 php artisan migrate:fresh 
 php artisan passport:client -–personal
 ```
