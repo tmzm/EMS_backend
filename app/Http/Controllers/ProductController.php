@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Imports\ProductsImport;
+use App\Http\Requests\editProductRequest;
 use App\Models\Product;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -63,19 +61,21 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
-        self::ok(Product::where('slug',$slug)->first());
+        $product = Product::where('slug',$slug)->first();
+        $product ? self::ok($product) : self::notFound();
     }
 
     public function show_by_id($product_id)
     {
-        self::ok(Product::find($product_id));
+        $product = Product::find($product_id);
+        $product ? self::ok($product) : self::notFound();
     }
 
     /**
-     * @param UpdateProductRequest $request
+     * @param editProductRequest $request
      * @param $product_id
      */
-    public function update(UpdateProductRequest $request, $product_id)
+    public function edit(editProductRequest $request, $product_id)
     {
         self::update_product($request, $product_id);
     }

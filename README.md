@@ -8,6 +8,24 @@
 
 Optional: Install TablePlus or use phpMyAdmin to manage your database.
 
+## Use TablePlus Guide:
+
+### 1. Press on the plus button then chose `MySQL`
+
+<img style="border: 2px solid red; border-radius: 10px" src="./public//images/docs/Screenshot 2024-06-28 191935.png" />
+
+### 2. Enter Database Information as shown in this image:
+
+<img style="border: 2px solid red; border-radius: 10px" src="./public//images/docs/Screenshot 2024-06-28 192253.jpg" />
+
+### 3. Press on the database
+
+<img style="border: 2px solid red; border-radius: 10px" src="./public//images/docs/Screenshot 2024-06-28 192452.png" />
+
+### 4. You can now see the information of the tables and edit the records
+
+<img style="border: 2px solid red; border-radius: 10px" src="./public//images/docs/Screenshot 2024-06-28 192508.png" />
+
 ## Steps to Setup
 
 ### 1. Start Xampp
@@ -29,17 +47,17 @@ When prompted for a password, simply press Enter without typing anything. Then r
 CREATE DATABASE EMS_database;
 ```
 
-### 3. Configure Environment
-
-In the project, create a new file named `.env` and copy everything from `.env.example` to `.env`.
-
-### 4. Clone the Repository
+### 3. Clone the Repository
 
 Run this command in the terminal to clone the repository to your PC:
 
 ```git
 git clone https://github.com/tmzm/EMS_backend
 ```
+
+### 4. Configure Environment
+
+In the project root directory, create a new file named `.env` and copy everything from `.env.example` to `.env`.
 
 ### 5. Install Dependencies and Setup Project
 
@@ -48,7 +66,8 @@ Navigate to the root folder of the project and run the following commands in ord
 ```laravel
 composer install
 php artisan passport:install
-php artisan migrate
+// Enter no if it asked for run pending migrations
+php artisan migrate:fresh 
 php artisan passport:client -–personal
 ```
 

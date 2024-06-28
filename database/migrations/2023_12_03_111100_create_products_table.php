@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -13,13 +14,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->uuid();
             $table->string('name');
             $table->string('image');
             $table->string('slug');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->boolean('accepted_by_admin')->default(false);
-            $table->double('quantity');
             $table->double('price');
             $table->text('description');
             $table->timestamps();

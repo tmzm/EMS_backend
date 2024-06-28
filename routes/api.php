@@ -11,9 +11,13 @@ Route::group([
 
     Route::get('/user/destroy', [UserController::class,'destroy']);
 
+//    Route::get('/user/refreshToken', [UserController::class,'refresh_token']);
+
+    Route::get('/me', [UserController::class,'show']);
+
 });
 
-Route::post('/user/refresh_password', [UserController::class,'refresh_password']);
+//Route::post('/user/refresh_password', [UserController::class,'refresh_password']);
 
 Route::post('/user/create', [UserController::class,'create']);
 
@@ -23,7 +27,13 @@ Route::group([
     'middleware'=>['auth:api']
 ],function(){
 
-    Route::resource(ProductController::class,'destroy')->except(['index']);
+    Route::post('/product/create',[ProductController::class,'create']);
+
+    Route::get('/product/id/{product_id}',[ProductController::class,'show_by_id']);
+
+    Route::get('/product/slug/{slug}',[ProductController::class,'show']);
+
+    Route::get('/product/index',[ProductController::class,'index']);
 
 })->middleware([AcceptedTrademarkOwnersMiddleware::class]);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class UserCreateRequest extends FormRequest
 {
@@ -19,14 +20,19 @@ class UserCreateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {
-        return [
+        $array = [
             'name' => 'required|min:5|max:50',
             'password' => 'required|min:8|max:50',
             'email' => 'required|unique:users,email|email',
+            'phone' => 'required|unique:users,phone',
             'role' => 'required',
             'image' => 'image|mimes:jpg,jpeg,png'
         ];
+
+        if($request->role == 'trademark_owner') $array['trademark_name'] = 'required|min:5|max:50';
+
+        return $array;
     }
 }

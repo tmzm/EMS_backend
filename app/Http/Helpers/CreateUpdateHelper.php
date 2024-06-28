@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait CreateUpdateHelper
 {
@@ -125,6 +126,7 @@ trait CreateUpdateHelper
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => bcrypt($data['password']),
             'role' => $data['role'],
             'device_key' => $data['device_key'] ?? null,
@@ -198,15 +200,28 @@ trait CreateUpdateHelper
 
         $image = self::save_image_to_public_directory($request);
 
+        // Clean the name and create slug
+        $slug = Str::slug($data['name']);
+        // Check if slug already exists
+        $count = Product::where('slug', $slug)->count();
+        // If slug already exists, append a number to make it unique
+        if ($count > 0) {
+            $slug = $slug . '-' . ($count + 1);
+        }
+
         $product = Product::create([
-            'name' => $data['scientific_name'],
+            'name' => $data['name'],
             'quantity' => $data['quantity'],
+            'slug' => $slug,
+            'user_id' => $request->user()->id,
             'description' => $data['description'],
             'price' => $data['price'],
             'image' => $image,
         ]);
 
-        foreach($data['categories'] as $category_id){
+        $categories = is_array($data['categories']) ? $data['categories'] : json_decode($data['categories']);
+
+        foreach($categories as $category_id){
             CategoryProduct::create([
                 'category_id' => $category_id,
                 'product_id' => $product->id

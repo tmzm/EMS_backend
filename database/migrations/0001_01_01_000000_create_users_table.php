@@ -20,9 +20,7 @@ return new class extends Migration
             $table->enum('role',['user','admin','trademark_owner']);
             $table->boolean('accepted_by_admin')->default(false);
             // trademark owner
-            $table->string('website')->nullable();
-            $table->string('city')->nullable();
-            $table->string('country')->nullable();
+            $table->string('Trademark_name')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('device_key')->nullable();
             $table->string('image')->nullable();

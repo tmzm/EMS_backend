@@ -19,9 +19,9 @@ trait AuthHelper
 
         $user = self::create_user($data);
 
-        $token = $user->createToken('UserToken')->accessToken;
+        $token = $user->createToken('User Token')->accessToken;
 
-        self::ok($user,$token);
+        self::ok($user,/*["accessToken" => */$token/*, "refreshToken" => $refreshToken]*/);
     }
 
     public function login_user($request): void
