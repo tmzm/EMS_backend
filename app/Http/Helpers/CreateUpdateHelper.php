@@ -211,7 +211,6 @@ trait CreateUpdateHelper
 
         $product = Product::create([
             'name' => $data['name'],
-            'quantity' => $data['quantity'],
             'slug' => $slug,
             'user_id' => $request->user()->id,
             'description' => $data['description'],
@@ -240,42 +239,41 @@ trait CreateUpdateHelper
 
         $data = $request->validated();
 
-        $image = self::save_image_to_public_directory($request);
+        $data['image'] = self::save_image_to_public_directory($request);
 
-        if($image !== false)
-            $data['image'] = $image;
+        if(isset($data['categories'])){
+            foreach($product->category_products as $category){
+                $isExists = 0;
 
-        foreach($product->category_products as $category){
-            $isExists = 0;
+                foreach($data['categories'] as $c){
 
-            foreach($data['categories'] as $c){
+                    if($c == $category->id){
+                        $isExists++;
+                    }
 
-                if($c == $category->id){
-                    $isExists++;
+
                 }
 
-
-            }
-
-            if($isExists == 0){
-                $category->delete();
-            }
-        }
-
-        foreach($data['categories'] as $category){
-            $isExists = 0;
-
-            foreach($product->category_products as $c){
-                if($c->id == $category){
-                    $isExists++;
+                if($isExists == 0){
+                    $category->delete();
                 }
             }
 
-            if($isExists == 0){
-                CategoryProduct::create([
-                    'product_id'=>$product->id,
-                    'category_id'=>$category
-                ]);
+            foreach($data['categories'] as $category){
+                $isExists = 0;
+
+                foreach($product->category_products as $c){
+                    if($c->id == $category){
+                        $isExists++;
+                    }
+                }
+
+                if($isExists == 0){
+                    CategoryProduct::create([
+                        'product_id'=>$product->id,
+                        'category_id'=>$category
+                    ]);
+                }
             }
         }
 
@@ -294,20 +292,6 @@ trait CreateUpdateHelper
         $product = Product::find($product_id);
 
         if($product) {
-            self::decrease_total_price_of_orders_that_have_this_product($product);
-
-            $users = User::byProductOrders($product)->get();
-
-            foreach ($users as $user){
-                if($user->device_key !== null){
-                    (new NotificationController)->notify(
-                        'series order changes',
-                        'an order product: '.$product->commercial_name .' no longer available',
-                        $user->device_key
-                    );
-                }
-            }
-
             self::delete_image(public_path($product->image));
 
             $product->delete();
@@ -322,6 +306,8 @@ trait CreateUpdateHelper
     {
         if(Favorite::where('user_id',$user_id)?->firstWhere('product_id',$product_id))
             self::unHandledError('favorite already exists');
+
+        if(!Product::find($product_id)) self::unHandledError('no such product');
 
         $favorite = Favorite::create([
             'product_id' => $product_id,

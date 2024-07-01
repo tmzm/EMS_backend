@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Booth extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

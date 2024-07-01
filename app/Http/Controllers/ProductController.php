@@ -82,12 +82,11 @@ class ProductController extends Controller
 
 
     /**
-     * @param Request $request
      * @param $product_id
      * @throws GuzzleException
      */
-    public function destroy(Request $request, $product_id)
+    public function destroy($product_id)
     {
-        self::delete_product($request,$product_id);
+        self::delete_product($product_id);
     }
 }

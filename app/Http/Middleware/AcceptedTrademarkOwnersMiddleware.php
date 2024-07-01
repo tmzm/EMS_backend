@@ -19,7 +19,7 @@ class AcceptedTrademarkOwnersMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(!$request->user()->accepted_by_admin) {
-            return MessageHelper::unAuth();
+            return $this->unAuth();
         }
         return $next($request);
     }
