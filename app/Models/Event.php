@@ -10,4 +10,9 @@ class Event extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function event_participates()
+    {
+        return $this->hasMany(EventParticipate::class);
+    }
 }

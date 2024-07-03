@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EventCreateRequest;
+use App\Http\Requests\EventEditRequest;
 use App\Models\Event;
 
 class EventController extends Controller
@@ -12,5 +13,37 @@ class EventController extends Controller
         $data = $request->validated();
         $event = Event::create($data);
         self::ok($event);
+    }
+
+    public function index()
+    {
+        self::ok(Event::latest()->get());
+    }
+
+    public function edit(EventEditRequest $request, $event_id)
+    {
+        $data = $request->validated();
+        $event = Event::find($event_id);
+        $event->update($data);
+        self::ok($event);
+    }
+
+    public function show($event_id)
+    {
+        $event = Event::find($event_id);
+        $event ? self::ok($event) : self::notFound();
+    }
+
+    public function destroy($event_id)
+    {
+        $event = Event::find($event_id);
+
+        if($event){
+            $event->delete();
+
+            self::ok();
+        }
+
+        self::notFound();
     }
 }

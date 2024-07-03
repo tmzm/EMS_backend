@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class editProductRequest extends FormRequest
+class BoothEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class editProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'min:5|max:50',
-            'quantity' => '',
-            'description' => 'min:5',
-            'price' => '',
-            'image' => 'image|mimes:jpg,jpeg,png'
+            "size" => "",
+            "price" => ""
         ];
     }
 }

@@ -9,5 +9,12 @@ class EventParticipateProduct extends Model
 {
     use HasFactory;
 
+    protected $with = ['product'];
+
     protected $guarded = [];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

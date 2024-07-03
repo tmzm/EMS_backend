@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateProductRequest;
-use App\Http\Requests\editProductRequest;
+use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductEditRequest;
 use App\Models\Product;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
@@ -48,9 +48,9 @@ class ProductController extends Controller
 
 
     /**
-     * @param CreateProductRequest $request
+     * @param ProductCreateRequest $request
      */
-    public function create(CreateProductRequest $request)
+    public function create(ProductCreateRequest $request)
     {
         self::create_product($request);
     }
@@ -72,10 +72,10 @@ class ProductController extends Controller
     }
 
     /**
-     * @param editProductRequest $request
+     * @param ProductEditRequest $request
      * @param $product_id
      */
-    public function edit(editProductRequest $request, $product_id)
+    public function edit(ProductEditRequest $request, $product_id)
     {
         self::update_product($request, $product_id);
     }
