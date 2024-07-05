@@ -371,7 +371,7 @@ trait CreateUpdateHelper
             self::ok();
         }
 
-        self::unFound();
+        self::notFound();
     }
 
 }

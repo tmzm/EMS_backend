@@ -3,11 +3,14 @@
 use App\Http\Controllers\BoothController;
 use App\Http\Controllers\EventParticipateController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RepresentativeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Middleware\AcceptedTrademarkOwnersMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 Route::group([
     'middleware'=>['auth:api']
@@ -42,6 +45,17 @@ Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group
     Route::post('/event/{event_id}/participate',[EventParticipateController::class,'participate']);
 
     Route::get('/event_participate/index',[EventParticipateController::class,'index']);
+
+    // Representative
+    Route::post('/representative/create',[RepresentativeController::class,'create']);
+
+    Route::put('/representative/{representative_id}/edit',[RepresentativeController::class,'edit']);
+
+    Route::get('/representative/index',[RepresentativeController::class,'index']);
+
+    Route::get('/representative/{representative_id}',[RepresentativeController::class,'show']);
+
+    Route::delete('/representative/{representative_id}/destroy',[RepresentativeController::class,'destroy']);
 });
 
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->group(function() {
@@ -79,4 +93,25 @@ Route::middleware(['auth:api'])->group(function(){
     Route::get('/favorite/{favorite_id}',[FavoriteController::class,'show']);
 
     Route::get('/favorite/{favorite_id}/destroy',[FavoriteController::class,'destroy']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    // Email verification notice
+    Route::get('/email/verify', function (Request $request) {
+        return response()->json(['message' => 'Email verification notice.'], 200);
+    })->name('verification.notice');
+
+    // Email verification handler
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return response()->json(['message' => 'Email verified successfully.'], 200);
+    })->middleware(['signed'])->name('verification.verify');
+
+    // Resend verification email
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json(['message' => 'Verification email sent.'], 200);
+    })->name('verification.send');
 });

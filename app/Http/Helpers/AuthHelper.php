@@ -5,6 +5,7 @@ namespace App\Http\Helpers;
 use App\Http\Controllers\NotificationController;
 use App\Models\User;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Auth\Events\Registered;
 
 trait AuthHelper
 {
@@ -20,6 +21,10 @@ trait AuthHelper
         $user = self::create_user($data);
 
         $token = $user->createToken('User Token')->accessToken;
+
+        event(new Registered($user));
+
+        $user->sendEmailVerificationNotification();
 
         self::ok($user,/*["accessToken" => */$token/*, "refreshToken" => $refreshToken]*/);
     }
