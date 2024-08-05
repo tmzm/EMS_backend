@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductEditRequest;
 use App\Models\Product;
+use App\Models\Rate;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,19 @@ class ProductController extends Controller
     public function index()
     {
         self::filter_products(request(['search', 'categories','sort', 'take', 'skip','price']));
+    }
+
+    public function get_product_rate($product_id)
+    {
+        $rates = Rate::where('product_id',$product_id)->get();
+
+        $sum = 0;
+
+        foreach ($rates as $rate){
+            $sum += $rate->number;
+        }
+
+        self::ok($sum / count($rates));
     }
 
     public function index_top_sellers()

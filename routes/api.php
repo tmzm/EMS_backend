@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BoothController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventParticipateController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RepresentativeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
@@ -20,6 +23,37 @@ Route::group([
 
     Route::get('/me', [UserController::class,'show']);
 
+    // Product
+    Route::get('/product/id/{product_id}',[ProductController::class,'show_by_id']);
+
+    Route::get('/product/slug/{slug}',[ProductController::class,'show']);
+
+    Route::get('/product/index',[ProductController::class,'index']);
+
+    Route::get('/product/{product_id}/rate',[ProductController::class,'get_product_rate']);
+
+    // Favorite
+    Route::get('/favorite/index',[FavoriteController::class,'index']);
+
+    Route::post('/favorite/product/{product_id}',[FavoriteController::class,'create']);
+
+    Route::get('/favorite/{favorite_id}',[FavoriteController::class,'show']);
+
+    Route::get('/favorite/{favorite_id}/destroy',[FavoriteController::class,'destroy']);
+
+    // Follow
+    Route::get('/follow/index',[FavoriteController::class,'index']);
+
+    Route::post('/follow/create',[FavoriteController::class,'create']);
+
+    Route::get('/follow/{follow_id}/destroy',[FavoriteController::class,'destroy']);
+
+    // Rate
+    Route::get('/rate/index',[FavoriteController::class,'index']);
+
+    Route::post('/rate/create',[FavoriteController::class,'create']);
+
+    Route::get('/rate/{rate_id}/destroy',[FavoriteController::class,'destroy']);
 });
 
 Route::post('/user/create', [UserController::class,'create']);
@@ -34,12 +68,6 @@ Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group
     Route::put('/product/{product_id}/edit',[ProductController::class,'edit']);
 
     Route::delete('/product/{product_id}/destroy',[ProductController::class,'destroy']);
-
-    Route::get('/product/id/{product_id}',[ProductController::class,'show_by_id']);
-
-    Route::get('/product/slug/{slug}',[ProductController::class,'show']);
-
-    Route::get('/product/index',[ProductController::class,'index']);
 
     // Participate in event
     Route::post('/event/{event_id}/participate',[EventParticipateController::class,'participate']);
@@ -56,6 +84,15 @@ Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group
     Route::get('/representative/{representative_id}',[RepresentativeController::class,'show']);
 
     Route::delete('/representative/{representative_id}/destroy',[RepresentativeController::class,'destroy']);
+
+    // Reports
+    Route::post('/report/create',[ReportController::class,'create']);
+
+    Route::get('/report/index',[RepresentativeController::class,'index']);
+
+    Route::get('/report/{report_id}',[RepresentativeController::class,'show']);
+
+    Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
 });
 
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->group(function() {
@@ -71,6 +108,26 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->gr
 
     Route::delete('/event/{event_id}/destroy',[EventController::class,'destroy']);
 
+    // Category
+    Route::post('/category/create',[CategoryController::class,'create']);
+
+    Route::get('/category/index',[CategoryController::class,'index']);
+
+    Route::put('/category/{category_id}/edit',[CategoryController::class,'edit']);
+
+    Route::get('/category/{category_id}',[CategoryController::class,'show']);
+
+    Route::delete('/category/{category_id}/destroy',[CategoryController::class,'destroy']);
+
+    // Activity
+    Route::post('/activity/create',[ActivityController::class,'create']);
+
+    Route::get('/activity/index',[ActivityController::class,'index']);
+
+    Route::get('/activity/{activity_id}',[ActivityController::class,'show']);
+
+    Route::delete('/activity/{activity_id}/destroy',[ActivityController::class,'destroy']);
+
     // Booth
     Route::post('/booth/event/{event_id}/create',[BoothController::class,'create']);
 
@@ -81,18 +138,11 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->gr
     Route::get('/booth/{booth_id}',[BoothController::class,'show']);
 
     Route::delete('/booth/{booth_id}/destroy',[BoothController::class,'destroy']);
-});
 
-Route::middleware(['auth:api'])->group(function(){
+    // Report
+    Route::get('/report/index_trademark_reports',[RepresentativeController::class,'index_trademark_reports']);
 
-    // Favorite
-    Route::get('/favorite/index',[FavoriteController::class,'index']);
-
-    Route::post('/favorite/product/{product_id}',[FavoriteController::class,'create']);
-
-    Route::get('/favorite/{favorite_id}',[FavoriteController::class,'show']);
-
-    Route::get('/favorite/{favorite_id}/destroy',[FavoriteController::class,'destroy']);
+    Route::get('/report/index_reports_on_user',[RepresentativeController::class,'index_reports_on_user']);
 });
 
 Route::middleware('auth:api')->group(function () {

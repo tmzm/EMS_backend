@@ -4,8 +4,9 @@ namespace App\Http\Helpers;
 
 use App\Http\Controllers\NotificationController;
 use App\Models\User;
+use App\Notifications\VerifyEmail as VF;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 
 trait AuthHelper
 {
@@ -13,18 +14,15 @@ trait AuthHelper
     {
         $data = $request->validated();
 
-        $image = self::save_image_to_public_directory($request);
-
-        if($image !== false)
-            $data['image'] = $image;
+        $data['image'] = self::save_image_to_public_directory($request);
 
         $user = self::create_user($data);
 
         $token = $user->createToken('User Token')->accessToken;
 
-        event(new Registered($user));
+//        event(new Registered($user));
 
-        $user->sendEmailVerificationNotification();
+        Mail::to($user)->send(new VF($user->name));
 
         self::ok($user,/*["accessToken" => */$token/*, "refreshToken" => $refreshToken]*/);
     }
@@ -42,10 +40,7 @@ trait AuthHelper
 
         $user = $request->user();
 
-        $image = self::save_image_to_public_directory($request);
-
-        if($image !== false)
-            $data['image'] = $image;
+        $data['image'] = self::save_image_to_public_directory($request);
 
         $user->update($data);
 

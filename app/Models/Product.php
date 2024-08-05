@@ -81,7 +81,7 @@ class Product extends Model
 
             }
 
-            if($filters['sort'] == 'prices-high-first)-'){
+            if($filters['sort'] == 'prices-high-first'){
 
                 $query->orderBy('price', 'desc');
 
@@ -107,14 +107,6 @@ class Product extends Model
     public function category_products(): HasMany
     {
         return $this->hasMany(CategoryProduct::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function order_items(): HasMany
-    {
-        return $this->hasMany(ORderItem::class);
     }
 
 }

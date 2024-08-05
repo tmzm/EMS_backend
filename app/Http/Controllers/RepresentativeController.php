@@ -12,6 +12,9 @@ class RepresentativeController extends Controller
     public function create(RepresentativeCreateRequest $request)
     {
         $data = $request->validated();
+
+        $data['image'] = self::save_image_to_public_directory($request);
+
         $representative = Representative::create([
             "user_id" => $request->user()->id,
             ...$data

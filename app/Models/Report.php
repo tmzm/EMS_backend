@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    protected $with = ['user','trademark'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function trademark()
+    {
+        return $this->belongsTo(User::class,'trademark_id');
+    }
 }

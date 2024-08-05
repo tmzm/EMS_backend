@@ -337,28 +337,24 @@ trait CreateUpdateHelper
 
         $data = $validator->validated();
 
-        Category::create($data);
+        $category = Category::create($data);
 
-        self::ok();
+        self::ok($category);
     }
 
     public function edit_category($request,$category_id)
     {
         $category = Category::find($category_id);
 
-        $validator = validator($request->all(),[
-            'name' => 'required|unique:categories,name'
-        ]);
-
-        $data = $validator->validated();
-
         if($category){
-            $category->update($data);
+            $category->update([
+                "name" => $request['name']
+            ]);
 
-            self::ok();
+            self::ok($category);
         }
 
-        self::unFound();
+        self::notFound();
     }
 
     public function destroy_category($category_id)

@@ -19,9 +19,9 @@ trait LogicHelper
                 return '/images/' .  $imageName;
             }
         }catch(Exception $e){
-            return '';
+            return '/no-image.jpg';
         }
-        return '';
+        return '/no-image.jpg';
     }
 
     public function delete_image($image_path): void
