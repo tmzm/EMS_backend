@@ -130,7 +130,8 @@ trait CreateUpdateHelper
             'password' => bcrypt($data['password']),
             'role' => $data['role'],
             'device_key' => $data['device_key'] ?? null,
-            'image' => $data['image'] ?? null
+            'image' => $data['image'] ?? null,
+            'trademark_name' => $data['role'] == 'trademark_owner' ? $data['trademark_name'] : null
         ]);
     }
 

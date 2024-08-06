@@ -12,6 +12,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Middleware\AcceptedTrademarkOwnersMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\RateController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -42,18 +44,30 @@ Route::group([
     Route::get('/favorite/{favorite_id}/destroy',[FavoriteController::class,'destroy']);
 
     // Follow
-    Route::get('/follow/index',[FavoriteController::class,'index']);
+    Route::get('/follow/index',[FollowController::class,'index']);
 
-    Route::post('/follow/create',[FavoriteController::class,'create']);
+    Route::post('/follow/create',[FollowController::class,'create']);
 
-    Route::get('/follow/{follow_id}/destroy',[FavoriteController::class,'destroy']);
+    Route::delete('/follow/{follow_id}/destroy',[FollowController::class,'destroy']);
 
     // Rate
-    Route::get('/rate/index',[FavoriteController::class,'index']);
+    Route::get('/rate/index',[RateController::class,'index']);
 
-    Route::post('/rate/create',[FavoriteController::class,'create']);
+    Route::post('/rate/product/{product_id}/create',[RateController::class,'create']);
 
-    Route::get('/rate/{rate_id}/destroy',[FavoriteController::class,'destroy']);
+    Route::delete('/rate/{rate_id}/destroy',[RateController::class,'destroy']);
+
+    // Category
+    Route::get('/category/index',[CategoryController::class,'index']);
+
+    Route::get('/category/{category_id}',[CategoryController::class,'show']);
+
+    // Report
+    Route::get('/report/index',[RepresentativeController::class,'index']);
+
+    Route::get('/report/{report_id}',[RepresentativeController::class,'show']);
+
+    Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
 });
 
 Route::post('/user/create', [UserController::class,'create']);
@@ -87,12 +101,6 @@ Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group
 
     // Reports
     Route::post('/report/create',[ReportController::class,'create']);
-
-    Route::get('/report/index',[RepresentativeController::class,'index']);
-
-    Route::get('/report/{report_id}',[RepresentativeController::class,'show']);
-
-    Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
 });
 
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->group(function() {
@@ -111,11 +119,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->gr
     // Category
     Route::post('/category/create',[CategoryController::class,'create']);
 
-    Route::get('/category/index',[CategoryController::class,'index']);
-
     Route::put('/category/{category_id}/edit',[CategoryController::class,'edit']);
-
-    Route::get('/category/{category_id}',[CategoryController::class,'show']);
 
     Route::delete('/category/{category_id}/destroy',[CategoryController::class,'destroy']);
 
@@ -138,11 +142,6 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->gr
     Route::get('/booth/{booth_id}',[BoothController::class,'show']);
 
     Route::delete('/booth/{booth_id}/destroy',[BoothController::class,'destroy']);
-
-    // Report
-    Route::get('/report/index_trademark_reports',[RepresentativeController::class,'index_trademark_reports']);
-
-    Route::get('/report/index_reports_on_user',[RepresentativeController::class,'index_reports_on_user']);
 });
 
 Route::middleware('auth:api')->group(function () {

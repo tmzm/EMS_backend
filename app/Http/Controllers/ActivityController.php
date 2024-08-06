@@ -17,7 +17,12 @@ class ActivityController extends Controller
 
     public function index(Request $request)
     {
-        self::ok(Activity::latest()->where('user_id',$request->user()->id)->get());
+        $activities = Activity::latest()->where('user_id',$request->user()->id);
+
+        if(isset($request['take']))
+            $activities = $activities->take($request['take']);
+
+        self::ok($activities->get());
     }
 
     public function show($activity_id)
