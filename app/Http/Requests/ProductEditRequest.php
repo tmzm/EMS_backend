@@ -23,10 +23,10 @@ class productEditRequest extends FormRequest
     {
         return [
             'name' => 'min:5|max:50',
-            'quantity' => '',
-            'description' => 'min:5',
+            'description' => '',
             'price' => '',
-            'image' => 'image|mimes:jpg,jpeg,png'
+            'image' => 'image|mimes:jpg,jpeg,png',
+            'categories' => ''
         ];
     }
 }

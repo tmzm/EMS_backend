@@ -26,9 +26,7 @@ class AppServiceProvider extends ServiceProvider
             $url->forceScheme('https');
         }
 
-//        Passport::tokensExpireIn(now()->addDays(3));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addDays(3));
+        Passport::personalAccessTokensExpireIn(now()->addDays(1));
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new MailMessage)
@@ -36,5 +34,10 @@ class AppServiceProvider extends ServiceProvider
                 ->line('Click the button below to verify your email address.')
                 ->action('Verify Email Address', $url);
         });
+
+        Passport::tokensCan([
+            'user-access-token' => 'Access for regular users',
+            'user-refresh-token' => 'Refresh token for regular users',
+        ]);
     }
 }

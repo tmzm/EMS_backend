@@ -240,7 +240,8 @@ trait CreateUpdateHelper
 
         $data = $request->validated();
 
-        $data['image'] = self::save_image_to_public_directory($request);
+        if(isset($data['image']) || $data['image'])
+            $data['image'] = self::save_image_to_public_directory($request);
 
         if(isset($data['categories'])){
             foreach($product->category_products as $category){
@@ -251,7 +252,6 @@ trait CreateUpdateHelper
                     if($c == $category->id){
                         $isExists++;
                     }
-
 
                 }
 

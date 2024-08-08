@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventEditRequest;
 use App\Models\Event;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -18,6 +19,13 @@ class EventController extends Controller
     public function index()
     {
         self::ok(Event::latest()->get());
+    }
+
+    public function index_active()
+    {
+        self::ok(Event::latest()->where('start_date', '<=', Carbon::now())
+        ->where('end_date', '>=', Carbon::now())
+        ->get());
     }
 
     public function edit(EventEditRequest $request, $event_id)

@@ -14,11 +14,22 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\RateController;
+use App\Http\Middleware\AccessTokensOnly;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
+Route::group(['middleware' => ['auth:api']] ,function(){
+    Route::get('/user/refresh-token', [UserController::class, 'refresh_token']);
+});
+
+
+// Global APIs 
 Route::group([
-    'middleware'=>['auth:api']
+    'middleware' =>
+    [
+        'auth:api',
+        AccessTokensOnly::class
+    ]
 ],function(){
 
     Route::get('/user/destroy', [UserController::class,'destroy']);
@@ -68,13 +79,25 @@ Route::group([
     Route::get('/report/{report_id}',[RepresentativeController::class,'show']);
 
     Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
+
+    // Event
+    Route::get('/event/index_active',[EventController::class,'index_active']);
+
+    Route::get('/event/index',[EventController::class,'index']);
+
 });
 
 Route::post('/user/create', [UserController::class,'create']);
 
 Route::post('/user/store', [UserController::class,'store']);
 
-Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group(function(){
+// Trademark owner APIs
+Route::middleware(
+    [
+        AcceptedTrademarkOwnersMiddleware::class,
+        'auth:api',
+        AccessTokensOnly::class
+    ])->group(function(){
 
     // Product
     Route::post('/product/create',[ProductController::class,'create']);
@@ -103,14 +126,18 @@ Route::middleware([AcceptedTrademarkOwnersMiddleware::class, 'auth:api'])->group
     Route::post('/report/create',[ReportController::class,'create']);
 });
 
-Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->group(function() {
+// Admin APIs
+Route::middleware(
+    [
+        \App\Http\Middleware\AdminMiddleware::class,
+        'auth:api',
+        AccessTokensOnly::class
+    ])->group(function() {
 
     // Event
     Route::post('/event/create',[EventController::class,'create']);
 
     Route::put('/event/{event_id}/edit',[EventController::class,'edit']);
-
-    Route::get('/event/index',[EventController::class,'index']);
 
     Route::get('/event/{event_id}',[EventController::class,'show']);
 
@@ -144,23 +171,23 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class, 'auth:api'])->gr
     Route::delete('/booth/{booth_id}/destroy',[BoothController::class,'destroy']);
 });
 
-Route::middleware('auth:api')->group(function () {
-    // Email verification notice
-    Route::get('/email/verify', function (Request $request) {
-        return response()->json(['message' => 'Email verification notice.'], 200);
-    })->name('verification.notice');
+// Route::middleware('auth:api')->group(function () {
+//     // Email verification notice
+//     Route::get('/email/verify', function (Request $request) {
+//         return response()->json(['message' => 'Email verification notice.'], 200);
+//     })->name('verification.notice');
 
-    // Email verification handler
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
+//     // Email verification handler
+//     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//         $request->fulfill();
 
-        return response()->json(['message' => 'Email verified successfully.'], 200);
-    })->middleware(['signed'])->name('verification.verify');
+//         return response()->json(['message' => 'Email verified successfully.'], 200);
+//     })->middleware(['signed'])->name('verification.verify');
 
-    // Resend verification email
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
+//     // Resend verification email
+//     Route::post('/email/verification-notification', function (Request $request) {
+//         $request->user()->sendEmailVerificationNotification();
 
-        return response()->json(['message' => 'Verification email sent.'], 200);
-    })->name('verification.send');
-});
+//         return response()->json(['message' => 'Verification email sent.'], 200);
+//     })->name('verification.send');
+// });

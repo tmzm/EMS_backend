@@ -18,20 +18,46 @@ trait AuthHelper
 
         $user = self::create_user($data);
 
-        $token = $user->createToken('User Token')->accessToken;
+        $accessToken = $user->createToken('user_access_token',['user-access-token'])->accessToken;
 
-//        event(new Registered($user));
+        $refreshTokenRow = $user->createToken('user_refresh_token',['user-refresh-token']);
+
+        $refreshTokenRow->token->expires_at = now()->addDays(30);
+        $refreshTokenRow->token->save();
+
+        $refreshToken = $refreshTokenRow->accessToken;
 
         Mail::to($user)->send(new VF($user->name));
 
-        self::ok($user,/*["accessToken" => */$token/*, "refreshToken" => $refreshToken]*/);
+        self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
     }
 
     public function login_user($request): void
     {
         $data = $request->validated();
 
-        auth()->attempt($data) ? self::ok(auth()->user(), auth()->user()->createToken('UserToken')->accessToken) : self::unAuth();
+        if(auth()->attempt($data)){
+            
+            $user = auth()->user();
+
+            $accessToken = $user->createToken('user_access_token',['user-access-token'])->accessToken;
+
+            $refreshTokenRow = $user->createToken('user_refresh_token',['user-refresh-token']);
+    
+            $refreshTokenRow->token->expires_at = now()->addDays(30);
+            $refreshTokenRow->token->save();
+    
+            $refreshToken = $refreshTokenRow->accessToken;
+    
+            Mail::to($user)->send(new VF($user->name));
+    
+            self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
+
+        } else {
+
+            self::unAuth();
+       
+        }
     }
 
     public function update_user($request): void

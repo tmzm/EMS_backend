@@ -11,8 +11,15 @@ class Event extends Model
 
     protected $guarded = [];
 
+    protected $with = ['booths'];
+
     public function event_participates()
     {
         return $this->hasMany(EventParticipate::class);
+    }
+
+    public function booths()
+    {
+        return $this->hasMany(Booth::class);
     }
 }
