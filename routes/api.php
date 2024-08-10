@@ -13,10 +13,13 @@ use App\Http\Middleware\AcceptedTrademarkOwnersMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RateController;
 use App\Http\Middleware\AccessTokensOnly;
+use App\Mail\OTPMail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 Route::group(['middleware' => ['auth:api']] ,function(){
     Route::get('/user/refresh-token', [UserController::class, 'refresh_token']);
@@ -35,6 +38,15 @@ Route::group([
     Route::get('/user/destroy', [UserController::class,'destroy']);
 
     Route::get('/me', [UserController::class,'show']);
+
+    // otp
+    Route::post('/otp/send-otp',[OtpController::class,'create']);
+
+    Route::get('/otp/resend-otp',[OtpController::class,'resend']);
+
+    Route::get('/otp/index',[OtpController::class,'index']);
+
+    Route::post('/otp/verify',[OtpController::class,'verify']);
 
     // Product
     Route::get('/product/id/{product_id}',[ProductController::class,'show_by_id']);

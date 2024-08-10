@@ -48,6 +48,15 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
 
+        'mailersend' => [
+            'transport' => 'smtp',
+            'host' => 'smtp.mailersend.net',
+            'port' => 587,
+            'encryption' => 'tls',
+            'username' => env('MAILERSEND_USERNAME'),
+            'password' => env('MAILERSEND_PASSWORD'),
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],
@@ -83,6 +92,8 @@ return [
         ],
 
     ],
+
+    'reply_to' => ['address' => 'example@example.com', 'name' => 'App Name'],
 
     /*
     |--------------------------------------------------------------------------

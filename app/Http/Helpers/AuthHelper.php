@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\VerifyEmail as VF;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Passport\Token;
 
 trait AuthHelper
 {
@@ -39,6 +40,12 @@ trait AuthHelper
         if(auth()->attempt($data)){
             
             $user = auth()->user();
+
+            $tokens = Token::where('user_id', $request->user()->id)->get();
+
+            foreach ($tokens as $token) {
+                $token->revoke();
+            }
 
             $accessToken = $user->createToken('user_access_token',['user-access-token'])->accessToken;
 
@@ -78,8 +85,13 @@ trait AuthHelper
         // Delete the User avatar
         self::delete_image($request->user()->avatar);
 
-        // Return the propel response
-        $request->user()->token()->revoke() ? self::ok() : self::unHandledError();
+        $tokens = Token::where('user_id', $request->user()->id)->get();
+
+        foreach ($tokens as $token) {
+            $token->revoke();
+        }
+
+        self::ok();
     }
 
     public function show_user_details($request): void
