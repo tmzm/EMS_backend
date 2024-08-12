@@ -17,7 +17,7 @@ trait MessageHelper
 
     public function unHandledError($error = null)
     {
-        throw new HttpResponseException(self::apiResponse(400,$error !== null ? ReturnMessages::Error->value : $error));
+        throw new HttpResponseException(self::apiResponse(400,$error === null ? ReturnMessages::Error->value : $error));
     }
 
     public function unAuth()

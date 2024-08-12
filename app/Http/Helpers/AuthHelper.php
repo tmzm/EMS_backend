@@ -3,6 +3,8 @@
 namespace App\Http\Helpers;
 
 use App\Http\Controllers\NotificationController;
+use App\Mail\OTPMail;
+use App\Models\Otp;
 use App\Models\User;
 use App\Notifications\VerifyEmail as VF;
 use GuzzleHttp\Exception\GuzzleException;
@@ -28,7 +30,19 @@ trait AuthHelper
 
         $refreshToken = $refreshTokenRow->accessToken;
 
-        Mail::to($user)->send(new VF($user->name));
+        $otp = Otp::create([
+            'user_id' => $user->id,
+            'number' => rand(100000, 999999),
+        ]);
+
+        try{
+            Mail::to($request->user()->email)
+            ->send(new OTPMail(
+                    $request->user()->name,
+                    $otp->number
+                )
+            );
+        }catch (\Exception $e){}
 
         self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
     }
@@ -55,8 +69,6 @@ trait AuthHelper
             $refreshTokenRow->token->save();
     
             $refreshToken = $refreshTokenRow->accessToken;
-    
-            Mail::to($user)->send(new VF($user->name));
     
             self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
 

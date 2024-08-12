@@ -97,6 +97,17 @@ Route::group([
 
     Route::get('/event/index',[EventController::class,'index']);
 
+    // Activity
+    Route::post('/activity/create',[ActivityController::class,'create']);
+
+    Route::get('/activity/index',[ActivityController::class,'index']);
+
+    Route::get('/activity/{activity_id}',[ActivityController::class,'show']);
+
+    Route::delete('/activity/{activity_id}/destroy',[ActivityController::class,'destroy']);
+
+    Route::get('/activity/user/{user_id}/index',[ActivityController::class,'index_of_user']);
+    
 });
 
 Route::post('/user/create', [UserController::class,'create']);
@@ -161,15 +172,6 @@ Route::middleware(
     Route::put('/category/{category_id}/edit',[CategoryController::class,'edit']);
 
     Route::delete('/category/{category_id}/destroy',[CategoryController::class,'destroy']);
-
-    // Activity
-    Route::post('/activity/create',[ActivityController::class,'create']);
-
-    Route::get('/activity/index',[ActivityController::class,'index']);
-
-    Route::get('/activity/{activity_id}',[ActivityController::class,'show']);
-
-    Route::delete('/activity/{activity_id}/destroy',[ActivityController::class,'destroy']);
 
     // Booth
     Route::post('/booth/event/{event_id}/create',[BoothController::class,'create']);
