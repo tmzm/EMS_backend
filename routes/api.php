@@ -107,6 +107,9 @@ Route::group([
     Route::delete('/activity/{activity_id}/destroy',[ActivityController::class,'destroy']);
 
     Route::get('/activity/user/{user_id}/index',[ActivityController::class,'index_of_user']);
+
+    // List all trademarks
+    Route::get('/trademark/index',[UserController::class,'index_trademarks']);
     
 });
 
@@ -133,6 +136,12 @@ Route::middleware(
     Route::post('/event/{event_id}/participate',[EventParticipateController::class,'participate']);
 
     Route::get('/event_participate/index',[EventParticipateController::class,'index']);
+
+    Route::get('/event_participate/index_active',[EventParticipateController::class,'index_active']);
+
+    Route::get('/event_participate/index_ended',[EventParticipateController::class,'index_ended']);
+
+    Route::get('/event_participate/{event_participate_id}',[EventParticipateController::class,'show']);
 
     // Representative
     Route::post('/representative/create',[RepresentativeController::class,'create']);
@@ -183,25 +192,7 @@ Route::middleware(
     Route::get('/booth/{booth_id}',[BoothController::class,'show']);
 
     Route::delete('/booth/{booth_id}/destroy',[BoothController::class,'destroy']);
+
+    // accept user
+    Route::post('/user/{user_id}/accept',[UserController::class,'accept_trademark']);
 });
-
-// Route::middleware('auth:api')->group(function () {
-//     // Email verification notice
-//     Route::get('/email/verify', function (Request $request) {
-//         return response()->json(['message' => 'Email verification notice.'], 200);
-//     })->name('verification.notice');
-
-//     // Email verification handler
-//     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//         $request->fulfill();
-
-//         return response()->json(['message' => 'Email verified successfully.'], 200);
-//     })->middleware(['signed'])->name('verification.verify');
-
-//     // Resend verification email
-//     Route::post('/email/verification-notification', function (Request $request) {
-//         $request->user()->sendEmailVerificationNotification();
-
-//         return response()->json(['message' => 'Verification email sent.'], 200);
-//     })->name('verification.send');
-// });

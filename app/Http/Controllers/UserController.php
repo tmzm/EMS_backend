@@ -75,4 +75,23 @@ class UserController extends Controller
 
         self::unAuth();
     }
+
+    public function accept_trademark($user_id)
+    {
+        $user = User::find($user_id);
+
+        if($user){
+            $user->accepted_by_admin = 1;
+            $user->save();
+
+            self::ok();
+        }
+
+        self::notFound();
+    }
+
+    public function index_trademarks()
+    {
+        self::ok(User::latest()->where('role','trademark_owner')->get());
+    }
 }

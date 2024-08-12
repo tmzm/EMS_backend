@@ -9,7 +9,7 @@ class EventParticipate extends Model
 {
     use HasFactory;
 
-    protected $with = ['event_participate_products','event_participate_representatives','invoice', 'user'];
+    protected $with = ['event_participate_products','event_participate_representatives','invoice', 'user','event'];
 
     protected $guarded = [];
 
@@ -32,5 +32,10 @@ class EventParticipate extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
     }
 }

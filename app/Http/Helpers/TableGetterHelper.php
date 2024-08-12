@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 
 trait TableGetterHelper
 {
-    public function filter_products($filters): void
+    public function filter_products($filters,$user_id): void
     {
-        $products = Product::filter($filters)->latest()->get();
+        $products = Product::filter($filters)->latest()->where('user_id',$user_id)->get();
 
         self::ok($products);
     }

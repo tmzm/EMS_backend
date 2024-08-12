@@ -14,9 +14,9 @@ class ProductController extends Controller
     /**
      *
      */
-    public function index()
+    public function index(Request $request)
     {
-        self::filter_products(request(['search', 'categories','sort', 'take', 'skip','price']));
+        self::filter_products(request(['search', 'categories','sort', 'take', 'skip','price']), $request->user()->id);
     }
 
     public function get_product_rate($product_id)
