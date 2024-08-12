@@ -15,6 +15,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\TransferController;
 use App\Http\Middleware\AccessTokensOnly;
 use App\Mail\OTPMail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -38,6 +39,13 @@ Route::group([
     Route::get('/user/destroy', [UserController::class,'destroy']);
 
     Route::get('/me', [UserController::class,'show']);
+
+    Route::get('/user/wallet', [UserController::class,'get_wallet']);
+
+    // Transfer
+    Route::post('/transfer/create', [TransferController::class,'create']);
+
+    Route::put('/transfer/{transfer_id}/edit', [TransferController::class,'edit']);
 
     // otp
     Route::post('/otp/send-otp',[OtpController::class,'create']);

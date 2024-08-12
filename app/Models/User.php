@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $guarded = [];
 
+    // protected $with = ['wallet'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -43,4 +45,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class);
+    }
+
+    public function wallet()
+    {
+        return $this->transfers()->sum('amount');
+    }
+
 }

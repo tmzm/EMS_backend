@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Mail\AcceptedUserMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Passport\Token;
 
 class UserController extends Controller
@@ -84,6 +86,13 @@ class UserController extends Controller
             $user->accepted_by_admin = 1;
             $user->save();
 
+            Mail::to($user->email)
+            ->send(new AcceptedUserMail(
+                    'http://localhost:3000/TmainPage',
+                    $user->email
+                )
+            );
+
             self::ok();
         }
 
@@ -93,5 +102,12 @@ class UserController extends Controller
     public function index_trademarks()
     {
         self::ok(User::latest()->where('role','trademark_owner')->get());
+    }
+
+    public function get_wallet(Request $request)
+    {
+        self::ok([
+            "amount" => $request->user()->wallet()
+        ]);    
     }
 }
