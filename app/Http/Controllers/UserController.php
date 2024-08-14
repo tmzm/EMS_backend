@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\AcceptedUserMail;
+use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -78,7 +79,7 @@ class UserController extends Controller
         self::unAuth();
     }
 
-    public function accept_trademark($user_id)
+    public function accept_trademark(Request $request, $user_id)
     {
         $user = User::find($user_id);
 
@@ -92,6 +93,11 @@ class UserController extends Controller
                     $user->email
                 )
             );
+
+            Activity::create([
+                'user_id' => $request->user()->id,
+                'description' => 'Accept ' + $user->name + ', the owner of ' + $user->trademark_name + ' trademark'
+            ]);
 
             self::ok();
         }
@@ -109,5 +115,18 @@ class UserController extends Controller
         self::ok([
             "amount" => $request->user()->wallet()
         ]);    
+    }
+
+    public function check_on_email()
+    {
+        $email = request()->input('email');
+
+        if($email)
+            if(User::firstWhere('email',$email))
+                self::ok();
+            else
+                self::notFound();
+        else
+            self::notFound(); 
     }
 }

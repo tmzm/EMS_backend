@@ -4,6 +4,7 @@ namespace App\Http\Helpers;
 
 use App\Enums\ReturnMessages;
 use App\Http\Controllers\NotificationController;
+use App\Models\Activity;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Favorite;
@@ -339,6 +340,11 @@ trait CreateUpdateHelper
         $data = $validator->validated();
 
         $category = Category::create($data);
+
+        Activity::create([
+            'user_id' => $request->user()->id,
+            'description' => 'Create category ' + $category->name
+        ]);
 
         self::ok($category);
     }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BoothCreateRequest;
 use App\Http\Requests\BoothEditRequest;
+use App\Models\Activity;
 use App\Models\Booth;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class BoothController extends Controller
@@ -12,12 +14,25 @@ class BoothController extends Controller
     public function create(BoothCreateRequest $request, $event_id)
     {
         $data = $request->validated();
+
+        $event = Event::find($event_id);
+
+        if(!$event){
+            self::UnHandledError('Event not found');
+        }
+
         $booth = Booth::create([
            "event_id" => $event_id,
            "size" => $data['size'],
            "price" => $data['price'],
            "status" => "available"
         ]);
+
+        Activity::create([
+            'user_id' => $request->user()->id,
+            'description' => 'Create booth for ' + $event->name
+        ]);
+
         self::ok($booth);
     }
 

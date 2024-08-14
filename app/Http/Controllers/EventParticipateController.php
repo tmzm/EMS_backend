@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EventParticipateCreateRequest;
+use App\Models\Activity;
 use App\Models\Booth;
 use App\Models\EventParticipate;
 use App\Models\EventParticipateProduct;
@@ -19,7 +20,7 @@ class EventParticipateController extends Controller
     {
         $data = $request->validated();
 
-        $booth = Booth::find($data['booth_id'])->where('event_id',$event_id)->first();
+        $booth = Booth::where('event_id',$event_id)->firstWhere('id',$data['booth_id']);
 
         if(!$booth){
             self::unHandledError('requested booth not found');

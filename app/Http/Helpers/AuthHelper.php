@@ -4,6 +4,7 @@ namespace App\Http\Helpers;
 
 use App\Http\Controllers\NotificationController;
 use App\Mail\OTPMail;
+use App\Models\Activity;
 use App\Models\Otp;
 use App\Models\User;
 use App\Notifications\VerifyEmail as VF;
@@ -36,13 +37,20 @@ trait AuthHelper
         ]);
 
         try{
-            Mail::to($request->user()->email)
+            Mail::to($user->email)
             ->send(new OTPMail(
-                    $request->user()->name,
+                    $user->name,
                     $otp->number
                 )
             );
         }catch (\Exception $e){}
+
+        if($request->user()->role == 'admin'){
+            Activity::create([
+                'user_id' => $request->user()->id,
+                'description' => 'Create admin ' + $user->name
+            ]);
+        }
 
         self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
     }
