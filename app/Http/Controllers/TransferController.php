@@ -12,7 +12,8 @@ class TransferController extends Controller
     public function create(Request $request)
     {
         $v = validator($request->all(),[
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'amount' => 'required'
         ]);
 
         $data = $v->validated();
@@ -27,7 +28,7 @@ class TransferController extends Controller
 
             Activity::create([
                 'user_id' => $request->user()->id,
-                'description' => 'Transfer to ' + $user->name
+                'description' => 'Transfer to ' . $user->name
             ]);
     
             self::ok($transfer);

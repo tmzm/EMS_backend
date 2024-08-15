@@ -18,7 +18,7 @@ class EventController extends Controller
 
         Activity::create([
             'user_id' => $request->user()->id,
-            'description' => 'create ' + $event->name + ' event'
+            'description' => 'create ' . $event->name . ' event'
         ]);
 
         self::ok($event);
@@ -44,7 +44,7 @@ class EventController extends Controller
 
         Activity::create([
             'user_id' => $request->user()->id,
-            'description' => 'edit ' + $event->name + ' event'
+            'description' => 'edit ' . $event->name . ' event'
         ]);
 
         self::ok($event);
@@ -65,7 +65,7 @@ class EventController extends Controller
 
             Activity::create([
                 'user_id' => $request->user()->id,
-                'description' => 'create ' + $event->name + ' event'
+                'description' => 'create ' . $event->name . ' event'
             ]);
 
             self::ok();

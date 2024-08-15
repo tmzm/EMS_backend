@@ -96,7 +96,7 @@ class UserController extends Controller
 
             Activity::create([
                 'user_id' => $request->user()->id,
-                'description' => 'Accept ' + $user->name + ', the owner of ' + $user->trademark_name + ' trademark'
+                'description' => 'Accept ' . $user->name . ', the owner of ' . $user->trademark_name . ' trademark'
             ]);
 
             self::ok();

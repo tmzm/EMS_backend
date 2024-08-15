@@ -30,7 +30,7 @@ class BoothController extends Controller
 
         Activity::create([
             'user_id' => $request->user()->id,
-            'description' => 'Create booth for ' + $event->name
+            'description' => 'Create booth for ' . $event->name
         ]);
 
         self::ok($booth);
