@@ -24,8 +24,13 @@ class ExhibitionController extends Controller
         self::ok($exhibition);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if(isset($request['take'])){
+            $exhibitions = Exhibition::latest()->take($request['take'])->get();
+            self::ok($exhibitions);
+        }
+
         self::ok(Exhibition::latest()->get());
     }
 

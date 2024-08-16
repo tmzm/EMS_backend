@@ -30,13 +30,4 @@ trait LogicHelper
             File::delete($image_path);
         }
     }
-
-    public function check_products_quantity($data): void
-    {
-        foreach ($data as $p) {
-            $product = Product::find($p['id']);
-            if(!$product || $product->quantity <= 0 || $product->quantity < $p['quantity'])
-                self::unHandledError('product don`t have enough quantity');
-        }
-    }
 }

@@ -14,7 +14,7 @@ use Laravel\Passport\Token;
 
 trait AuthHelper
 {
-    public function register_user($request, $creator_role)
+    public function register_user($request)
     {
         $data = $request->validated();
 
@@ -44,13 +44,6 @@ trait AuthHelper
                 )
             );
         }catch (\Exception $e){}
-
-        if($creator_role == 'admin'){
-            Activity::create([
-                'user_id' => $request->user()->id,
-                'description' => 'Create admin ' + $user->name
-            ]);
-        }
 
         self::ok($user,["accessToken" => $accessToken, "refreshToken" => $refreshToken]);
     }
@@ -120,36 +113,16 @@ trait AuthHelper
         self::ok($request->user());
     }
 
-    /**
-     * @throws GuzzleException
-     */
-    public function send_order_notification_to_user($request, $user): void
-    {
-        if(isset($request['status']))
-            (new NotificationController)->notify(
-                'the order has updated',
-                'the order new status is: ' . $request['status'],
-                $user->device_key
-            );
-        if(isset($request['payment_status']))
-            if($request['payment_status']) $paid = 'paid'; else $paid = 'not paid';
-        (new NotificationController)->notify(
-            'the order has updated',
-            'the order set to: ' . $paid,
-            $user->device_key
-        );
-    }
+    // public function edit_fcm_token($request): void
+    // {
+    //     $user = $request->user();
 
-    public function edit_fcm_token($request): void
-    {
-        $user = $request->user();
+    //     isset($request['fcm_token']) ? $user->device_key = $request['fcm_token'] : self::unHandledError();
 
-        isset($request['fcm_token']) ? $user->device_key = $request['fcm_token'] : self::unHandledError();
+    //     $user->save();
 
-        $user->save();
-
-        self::ok();
-    }
+    //     self::ok();
+    // }
 
     public function upgrade_to_admin($request,$user_id): void
     {

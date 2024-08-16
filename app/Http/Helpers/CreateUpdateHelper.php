@@ -20,30 +20,6 @@ use Illuminate\Support\Str;
 
 trait CreateUpdateHelper
 {
-    public function update_order_status($order,$request) : void
-    {
-        $order->update([
-            'status' => $request['status'],
-            'payment_status' => $request['payment_status']
-        ]);
-
-        $user = User::find($order->user_id);
-
-        if($user->device_key !== null)
-            self::send_order_notification_to_user($request,$user);
-    }
-
-    public function increase_every_product_by_quantity($order): void
-    {
-        $orderItems = $order->order_items;
-        foreach ($orderItems as $item){
-            $p = Product::find($item->product->id);
-            if($p->is_quantity){
-                $p->quantity += $item->quantity;
-                $p->save();
-            }
-        }
-    }
 
     public function create_user($data)
     {
