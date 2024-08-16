@@ -18,22 +18,19 @@ use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\TransferController;
 use App\Http\Middleware\AccessTokensOnly;
-use App\Mail\OTPMail;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Middleware\VerifiedEmail;
 
 Route::group(['middleware' => ['auth:api']] ,function(){
     Route::get('/user/refresh-token', [UserController::class, 'refresh_token']);
 });
-
 
 // Global APIs 
 Route::group([
     'middleware' =>
     [
         'auth:api',
-        AccessTokensOnly::class
+        AccessTokensOnly::class,
+        VerifiedEmail::class
     ]
 ],function(){
 
@@ -129,7 +126,8 @@ Route::middleware(
     [
         AcceptedTrademarkOwnersMiddleware::class,
         'auth:api',
-        AccessTokensOnly::class
+        AccessTokensOnly::class,
+        VerifiedEmail::class
     ])->group(function(){
 
     // Product
@@ -170,7 +168,8 @@ Route::middleware(
     [
         \App\Http\Middleware\AdminMiddleware::class,
         'auth:api',
-        AccessTokensOnly::class
+        AccessTokensOnly::class,
+        VerifiedEmail::class
     ])->group(function() {
 
     // Exhibition

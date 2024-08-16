@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->double('passport_number')->unique();
-            $table->enum('visa_state',['accepted','pending','denied']);
+            $table->enum('visa_state',['accepted','pending','denied'])->default('pending');
             $table->timestamps();
         });
     }

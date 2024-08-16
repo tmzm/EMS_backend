@@ -26,7 +26,8 @@ class RepresentativeEditRequest extends FormRequest
             "image" => "",
             "email" => "email|unique:users,email",
             "phone" => "",
-            "passport_number" => ""
+            "visa_state" => "enum:accepted,pending,denied",
+            "passport_number" => "unique:representative,passport_number"
         ];
     }
 }

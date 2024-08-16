@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('image');
             $table->string('slug');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->boolean('accepted_by_admin')->default(false);
             $table->double('price');
             $table->text('description');
             $table->timestamps();

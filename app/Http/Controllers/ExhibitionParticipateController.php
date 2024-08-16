@@ -26,6 +26,23 @@ class ExhibitionParticipateController extends Controller
             self::unHandledError('requested booth not found');
         }
 
+        $products = is_array($data['products']) ? $data['products'] : json_decode($data['products']);
+        $representatives = is_array($data['representatives']) ? $data['representatives'] : json_decode($data['representatives']);
+
+        foreach($representatives as $representative_id){
+            $r = Representative::find($representative_id);
+            if(!$r || $r->visa_state != 'accepted'){
+                self::unHandledError('representative not found or visa state is not accepted');
+            }
+        }
+
+        foreach($products as $product_id){
+            $p = Representative::find($product_id);
+            if(!$p){
+                self::unHandledError('requested representative not found');
+            }
+        }
+
         $exhibition_participate = ExhibitionParticipate::create([
             'user_id' => $request->user()->id,
             'exhibition_id' => $exhibition_id,
@@ -36,24 +53,20 @@ class ExhibitionParticipateController extends Controller
             "status" => "reserved"
         ]);
 
-        $products = is_array($data['products']) ? $data['products'] : json_decode($data['products']);
-        $representatives = is_array($data['representatives']) ? $data['representatives'] : json_decode($data['representatives']);
 
         foreach($products as $product){
-            if(Product::find($product['id']))
-                ExhibitionParticipateProduct::create([
-                    'exhibition_participate_id' => $exhibition_participate->id,
-                    'product_id' => $product['id'],
-                    'quantity' => $product['quantity']
-                ]);
+            ExhibitionParticipateProduct::create([
+                'exhibition_participate_id' => $exhibition_participate->id,
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity']
+            ]);
         }
 
         foreach($representatives as $representative_id){
-            if(Representative::find($representative_id))
-                ExhibitionParticipateRepresentative::create([
-                    'exhibition_participate_id' => $exhibition_participate->id,
-                    'representative_id' => $representative_id
-                ]);
+            ExhibitionParticipateRepresentative::create([
+                'exhibition_participate_id' => $exhibition_participate->id,
+                'representative_id' => $representative_id
+            ]);
         }
 
         Invoice::create([
