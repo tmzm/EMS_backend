@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Exhibition extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,9 @@ class Event extends Model
 
     protected $with = ['booths'];
 
-    public function event_participates()
+    public function exhibition_participates()
     {
-        return $this->hasMany(EventParticipate::class);
+        return $this->hasMany(ExhibitionParticipate::class);
     }
 
     public function booths()

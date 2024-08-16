@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function create(UserCreateRequest $request): void
     {
-        self::register_user($request);
+        self::register_user($request, $request->user()->role);
     }
 
     /**

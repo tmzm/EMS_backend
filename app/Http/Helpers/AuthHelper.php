@@ -14,7 +14,7 @@ use Laravel\Passport\Token;
 
 trait AuthHelper
 {
-    public function register_user($request)
+    public function register_user($request, $creator_role)
     {
         $data = $request->validated();
 
@@ -45,7 +45,7 @@ trait AuthHelper
             );
         }catch (\Exception $e){}
 
-        if($request->user()->role == 'admin'){
+        if($creator_role == 'admin'){
             Activity::create([
                 'user_id' => $request->user()->id,
                 'description' => 'Create admin ' + $user->name

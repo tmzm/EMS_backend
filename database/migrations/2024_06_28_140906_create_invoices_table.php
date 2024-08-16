@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->double('amount');
-            $table->foreignId('event_participate_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('exhibition_participate_id')->constrained()->cascadeOnDelete();
             $table->enum('status',['paid','unpaid'])->default('unpaid');
             $table->timestamps();
         });

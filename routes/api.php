@@ -3,12 +3,12 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BoothController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\EventParticipateController;
+use App\Http\Controllers\ExhibitionParticipateController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RepresentativeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\EventController;
+use App\Http\Controllers\ExhibitionController;
 use App\Http\Middleware\AcceptedTrademarkOwnersMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoriteController;
@@ -99,10 +99,10 @@ Route::group([
 
     Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
 
-    // Event
-    Route::get('/event/index_active',[EventController::class,'index_active']);
+    // Exhibition
+    Route::get('/exhibition/index_active',[ExhibitionController::class,'index_active']);
 
-    Route::get('/event/index',[EventController::class,'index']);
+    Route::get('/exhibition/index',[ExhibitionController::class,'index']);
 
     // Activity
     Route::post('/activity/create',[ActivityController::class,'create']);
@@ -139,16 +139,16 @@ Route::middleware(
 
     Route::delete('/product/{product_id}/destroy',[ProductController::class,'destroy']);
 
-    // Participate in event
-    Route::post('/event/{event_id}/participate',[EventParticipateController::class,'participate']);
+    // Participate in Exhibition
+    Route::post('/exhibition/{exhibition_id}/participate',[ExhibitionParticipateController::class,'participate']);
 
-    Route::get('/event_participate/index',[EventParticipateController::class,'index']);
+    Route::get('/exhibition_participate/index',[ExhibitionParticipateController::class,'index']);
 
-    Route::get('/event_participate/index_active',[EventParticipateController::class,'index_active']);
+    Route::get('/exhibition_participate/index_active',[ExhibitionParticipateController::class,'index_active']);
 
-    Route::get('/event_participate/index_ended',[EventParticipateController::class,'index_ended']);
+    Route::get('/exhibition_participate/index_ended',[ExhibitionParticipateController::class,'index_ended']);
 
-    Route::get('/event_participate/{event_participate_id}',[EventParticipateController::class,'show']);
+    Route::get('/exhibition_participate/{exhibition_participate_id}',[ExhibitionParticipateController::class,'show']);
 
     // Representative
     Route::post('/representative/create',[RepresentativeController::class,'create']);
@@ -173,14 +173,14 @@ Route::middleware(
         AccessTokensOnly::class
     ])->group(function() {
 
-    // Event
-    Route::post('/event/create',[EventController::class,'create']);
+    // Exhibition
+    Route::post('/exhibition/create',[ExhibitionController::class,'create']);
 
-    Route::put('/event/{event_id}/edit',[EventController::class,'edit']);
+    Route::put('/exhibition/{exhibition_id}/edit',[ExhibitionController::class,'edit']);
 
-    Route::get('/event/{event_id}',[EventController::class,'show']);
+    Route::get('/exhibition/{exhibition_id}',[ExhibitionController::class,'show']);
 
-    Route::delete('/event/{event_id}/destroy',[EventController::class,'destroy']);
+    Route::delete('/exhibition/{exhibition_id}/destroy',[ExhibitionController::class,'destroy']);
 
     // Category
     Route::post('/category/create',[CategoryController::class,'create']);
@@ -190,11 +190,11 @@ Route::middleware(
     Route::delete('/category/{category_id}/destroy',[CategoryController::class,'destroy']);
 
     // Booth
-    Route::post('/booth/event/{event_id}/create',[BoothController::class,'create']);
+    Route::post('/booth/exhibition/{exhibition_id}/create',[BoothController::class,'create']);
 
     Route::put('/booth/{booth_id}/edit',[BoothController::class,'edit']);
 
-    Route::get('/booth/event/{event_id}/index',[BoothController::class,'index']);
+    Route::get('/booth/exhibition/{exhibition_id}/index',[BoothController::class,'index']);
 
     Route::get('/booth/{booth_id}',[BoothController::class,'show']);
 

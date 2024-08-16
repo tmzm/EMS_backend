@@ -53,7 +53,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function wallet()
     {
-        return $this->transfers()->sum('amount');
+        $deposits = $this->transfers()->where('type', 'deposit')
+            ->sum('amount');
+            
+        $withdrawals = $this->transfers()->where('type', 'withdrawal')
+            ->sum('amount');
+
+        return $deposits - $withdrawals;
     }
 
 }

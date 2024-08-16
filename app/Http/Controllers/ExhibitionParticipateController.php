@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventParticipateCreateRequest;
+use App\Http\Requests\ExhibitionParticipateCreateRequest;
 use App\Models\Activity;
 use App\Models\Booth;
-use App\Models\EventParticipate;
-use App\Models\EventParticipateProduct;
-use App\Models\EventParticipateRepresentative;
+use App\Models\ExhibitionParticipate;
+use App\Models\ExhibitionParticipateProduct;
+use App\Models\ExhibitionParticipateRepresentative;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Representative;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class EventParticipateController extends Controller
+class ExhibitionParticipateController extends Controller
 {
-    public function participate(EventParticipateCreateRequest $request, $event_id)
+    public function participate(ExhibitionParticipateCreateRequest $request, $exhibition_id)
     {
         $data = $request->validated();
 
-        $booth = Booth::where('event_id',$event_id)->firstWhere('id',$data['booth_id']);
+        $booth = Booth::where('exhibition_id',$exhibition_id)->firstWhere('id',$data['booth_id']);
 
         if(!$booth){
             self::unHandledError('requested booth not found');
         }
 
-        $event_participate = EventParticipate::create([
+        $exhibition_participate = ExhibitionParticipate::create([
             'user_id' => $request->user()->id,
-            'event_id' => $event_id,
+            'exhibition_id' => $exhibition_id,
             'booth_id' => $data['booth_id']
         ]);
 
@@ -41,8 +41,8 @@ class EventParticipateController extends Controller
 
         foreach($products as $product){
             if(Product::find($product['id']))
-                EventParticipateProduct::create([
-                    'event_participate_id' => $event_participate->id,
+                ExhibitionParticipateProduct::create([
+                    'exhibition_participate_id' => $exhibition_participate->id,
                     'product_id' => $product['id'],
                     'quantity' => $product['quantity']
                 ]);
@@ -50,29 +50,29 @@ class EventParticipateController extends Controller
 
         foreach($representatives as $representative_id){
             if(Representative::find($representative_id))
-                EventParticipateRepresentative::create([
-                    'event_participate_id' => $event_participate->id,
+                ExhibitionParticipateRepresentative::create([
+                    'exhibition_participate_id' => $exhibition_participate->id,
                     'representative_id' => $representative_id
                 ]);
         }
 
         Invoice::create([
-            "event_participate_id" => $event_participate->id,
+            "exhibition_participate_id" => $exhibition_participate->id,
             "amount" => $booth->price + 200000
         ]);
 
-        self::ok(EventParticipate::find($event_participate->id));
+        self::ok(ExhibitionParticipate::find($exhibition_participate->id));
     }
 
     public function index(Request $request)
     {
-        self::ok(EventParticipate::latest()->where('user_id',$request->user()->id)->get());
+        self::ok(ExhibitionParticipate::latest()->where('user_id',$request->user()->id)->get());
     }
 
     public function index_active(Request $request)
     {
-        self::ok(EventParticipate::latest()
-        ->whereHas('event',
+        self::ok(ExhibitionParticipate::latest()
+        ->whereHas('exhibition',
             fn($query) => $query->where('start_date', '<=', Carbon::now())
                                 ->where('end_date', '>=', Carbon::now()))
                                 ->get());
@@ -80,19 +80,19 @@ class EventParticipateController extends Controller
 
     public function index_ended(Request $request)
     {
-        self::ok(EventParticipate::latest()
-        ->whereHas('event',
+        self::ok(ExhibitionParticipate::latest()
+        ->whereHas('exhibition',
             fn($query) => $query->where('start_date', '>=', Carbon::now())
                                 ->orWhere('end_date', '<=', Carbon::now()))
                                 ->get());
     }
 
-    public function show($event_participate_id)
+    public function show($exhibition_participate_id)
     {
-        $event_participate = EventParticipate::find($event_participate_id);
+        $exhibition_participate = ExhibitionParticipate::find($exhibition_participate_id);
 
-        if($event_participate){
-            self::ok($event_participate);
+        if($exhibition_participate){
+            self::ok($exhibition_participate);
         }
 
         self::notFound();

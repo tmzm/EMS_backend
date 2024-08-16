@@ -6,23 +6,23 @@ use App\Http\Requests\BoothCreateRequest;
 use App\Http\Requests\BoothEditRequest;
 use App\Models\Activity;
 use App\Models\Booth;
-use App\Models\Event;
+use App\Models\Exhibition;
 use Illuminate\Http\Request;
 
 class BoothController extends Controller
 {
-    public function create(BoothCreateRequest $request, $event_id)
+    public function create(BoothCreateRequest $request, $exhibition_id)
     {
         $data = $request->validated();
 
-        $event = Event::find($event_id);
+        $exhibition = Exhibition::find($exhibition_id);
 
-        if(!$event){
-            self::UnHandledError('Event not found');
+        if(!$exhibition){
+            self::UnHandledError('Exhibition not found');
         }
 
         $booth = Booth::create([
-           "event_id" => $event_id,
+           "exhibition_id" => $exhibition_id,
            "size" => $data['size'],
            "price" => $data['price'],
            "status" => "available"
@@ -30,7 +30,7 @@ class BoothController extends Controller
 
         Activity::create([
             'user_id' => $request->user()->id,
-            'description' => 'Create booth for ' . $event->name
+            'description' => 'Create booth for ' . $exhibition->name
         ]);
 
         self::ok($booth);
@@ -44,9 +44,9 @@ class BoothController extends Controller
         self::ok($booth);
     }
 
-    public function index($event_id)
+    public function index($exhibition_id)
     {
-        self::ok(Booth::where('event_id',$event_id)->latest()->get());
+        self::ok(Booth::where('exhibition_id',$exhibition_id)->latest()->get());
     }
 
     public  function show($booth_id)
