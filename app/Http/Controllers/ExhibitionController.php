@@ -34,11 +34,15 @@ class ExhibitionController extends Controller
         self::ok(Exhibition::latest()->get());
     }
 
-    public function index_active()
+    public function index_active(Request $request)
     {
-        self::ok(Exhibition::latest()->where('start_date', '<=', Carbon::now())
-        ->where('end_date', '>=', Carbon::now())
-        ->get());
+        $exhibitions = Exhibition::latest()->where('start_date', '<=', Carbon::now())
+        ->where('end_date', '>=', Carbon::now());
+
+        if(isset($request['take']))
+            $exhibitions = $exhibitions->take($request['take']);
+
+        self::ok($exhibitions->get());
     }
 
     public function edit(ExhibitionEditRequest $request, $exhibition_id)

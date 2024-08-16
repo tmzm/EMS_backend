@@ -121,6 +121,13 @@ Route::post('/user/create', [UserController::class,'create']);
 
 Route::post('/user/store', [UserController::class,'store']);
 
+// Exhibition no auth APIs
+Route::get('/exhibition_participate/index',[ExhibitionParticipateController::class,'index']);
+
+Route::get('/exhibition_participate/index_active',[ExhibitionParticipateController::class,'index_active']);
+
+Route::get('/exhibition_participate/index_ended',[ExhibitionParticipateController::class,'index_ended']);
+
 // Trademark owner APIs
 Route::middleware(
     [
@@ -139,12 +146,6 @@ Route::middleware(
 
     // Participate in Exhibition
     Route::post('/exhibition/{exhibition_id}/participate',[ExhibitionParticipateController::class,'participate']);
-
-    Route::get('/exhibition_participate/index',[ExhibitionParticipateController::class,'index']);
-
-    Route::get('/exhibition_participate/index_active',[ExhibitionParticipateController::class,'index_active']);
-
-    Route::get('/exhibition_participate/index_ended',[ExhibitionParticipateController::class,'index_ended']);
 
     Route::get('/exhibition_participate/{participate_id}',[ExhibitionParticipateController::class,'show']);
 
