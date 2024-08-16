@@ -56,7 +56,7 @@ class ExhibitionParticipateController extends Controller
 
         foreach($products as $product){
             ExhibitionParticipateProduct::create([
-                'exhibition_participate_id' => $exhibition_participate->id,
+                'participate_id' => $exhibition_participate->id,
                 'product_id' => $product['id'],
                 'quantity' => $product['quantity']
             ]);
@@ -64,13 +64,13 @@ class ExhibitionParticipateController extends Controller
 
         foreach($representatives as $representative_id){
             ExhibitionParticipateRepresentative::create([
-                'exhibition_participate_id' => $exhibition_participate->id,
+                'participate_id' => $exhibition_participate->id,
                 'representative_id' => $representative_id
             ]);
         }
 
         Invoice::create([
-            "exhibition_participate_id" => $exhibition_participate->id,
+            "participate_id" => $exhibition_participate->id,
             "amount" => $booth->price + 200000
         ]);
 
@@ -100,9 +100,9 @@ class ExhibitionParticipateController extends Controller
                                 ->get());
     }
 
-    public function show($exhibition_participate_id)
+    public function show($participate_id)
     {
-        $exhibition_participate = ExhibitionParticipate::find($exhibition_participate_id);
+        $exhibition_participate = ExhibitionParticipate::find($participate_id);
 
         if($exhibition_participate){
             self::ok($exhibition_participate);

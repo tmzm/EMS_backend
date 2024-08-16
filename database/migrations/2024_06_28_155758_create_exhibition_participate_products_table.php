@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->double('quantity');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('exhibition_participate_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('participate_id')->constrained('exhibition_participates')->cascadeOnDelete();
             $table->timestamps();
         });
     }

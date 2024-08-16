@@ -146,7 +146,7 @@ Route::middleware(
 
     Route::get('/exhibition_participate/index_ended',[ExhibitionParticipateController::class,'index_ended']);
 
-    Route::get('/exhibition_participate/{exhibition_participate_id}',[ExhibitionParticipateController::class,'show']);
+    Route::get('/exhibition_participate/{participate_id}',[ExhibitionParticipateController::class,'show']);
 
     // Representative
     Route::post('/representative/create',[RepresentativeController::class,'create']);
