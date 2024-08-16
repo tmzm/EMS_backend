@@ -129,4 +129,14 @@ class UserController extends Controller
         else
             self::notFound(); 
     }
+
+    public function show_trademark($user_id)
+    {
+        $user = User::find($user_id);
+        
+        if($user)
+            self::ok($user);
+
+        self::notFound();
+    }
 }

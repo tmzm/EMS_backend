@@ -117,6 +117,8 @@ Route::group([
 
     // List all trademarks
     Route::get('/trademark/index',[UserController::class,'index_trademarks']);
+
+    Route::get('/trademark/{user_id}',[UserController::class,'show_trademark']);
     
 });
 
