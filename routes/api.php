@@ -24,6 +24,23 @@ Route::group(['middleware' => ['auth:api']] ,function(){
     Route::get('/user/refresh-token', [UserController::class, 'refresh_token']);
 });
 
+Route::group([
+    'middleware' =>
+    [
+        'auth:api',
+        AccessTokensOnly::class,
+    ]
+],function(){
+    // otp
+    Route::post('/otp/send-otp',[OtpController::class,'create']);
+
+    Route::get('/otp/resend-otp',[OtpController::class,'resend']);
+    
+    Route::get('/otp/index',[OtpController::class,'index']);
+    
+    Route::post('/otp/verify',[OtpController::class,'verify']);
+});
+
 // Global APIs 
 Route::group([
     'middleware' =>
@@ -41,16 +58,6 @@ Route::group([
     Route::get('/user/wallet', [UserController::class,'get_wallet']);
 
     Route::post('/user/check_on_email', [UserController::class,'check_on_email']);
-
-
-    // otp
-    Route::post('/otp/send-otp',[OtpController::class,'create']);
-
-    Route::get('/otp/resend-otp',[OtpController::class,'resend']);
-
-    Route::get('/otp/index',[OtpController::class,'index']);
-
-    Route::post('/otp/verify',[OtpController::class,'verify']);
 
     // Product
     Route::get('/product/id/{product_id}',[ProductController::class,'show_by_id']);
