@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,12 @@ class InvoiceController extends Controller
 
             $invoice->status = 'paid';
             $invoice->save();
+
+            Transfer::create([
+                'user_id' => $request->user()->id,
+                'amount' => $invoice->price,
+                'type' => 'withdrawal',
+            ]);
 
             self::ok();
         }else{
