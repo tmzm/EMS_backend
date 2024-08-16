@@ -39,6 +39,8 @@ Route::group([
     Route::get('/otp/index',[OtpController::class,'index']);
     
     Route::post('/otp/verify',[OtpController::class,'verify']);
+
+    Route::get('/me', [UserController::class,'show']);
 });
 
 // Global APIs 
@@ -52,8 +54,6 @@ Route::group([
 ],function(){
 
     Route::get('/user/destroy', [UserController::class,'destroy']);
-
-    Route::get('/me', [UserController::class,'show']);
 
     Route::get('/user/wallet', [UserController::class,'get_wallet']);
 
@@ -103,10 +103,6 @@ Route::group([
 
     Route::delete('/report/{report_id}/destroy',[RepresentativeController::class,'destroy']);
 
-    // Exhibition
-    Route::get('/exhibition/index_active',[ExhibitionController::class,'index_active']);
-
-    Route::get('/exhibition/index',[ExhibitionController::class,'index']);
 
     // Activity
     Route::post('/activity/create',[ActivityController::class,'create']);
@@ -134,6 +130,10 @@ Route::get('/exhibition_participate/index',[ExhibitionParticipateController::cla
 Route::get('/exhibition_participate/index_active',[ExhibitionParticipateController::class,'index_active']);
 
 Route::get('/exhibition_participate/index_ended',[ExhibitionParticipateController::class,'index_ended']);
+
+Route::get('/exhibition/index_active',[ExhibitionController::class,'index_active']);
+
+Route::get('/exhibition/index',[ExhibitionController::class,'index']);
 
 // Trademark owner APIs
 Route::middleware(
