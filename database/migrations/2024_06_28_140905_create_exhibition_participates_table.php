@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('exhibition_participates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('exhibition_id')->unique()->constrained()->cascadeOnDelete();
-            $table->foreignId('booth_id')->unique()->constrained()->cascadeOnDelete();
+            $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('booth_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
