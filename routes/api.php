@@ -119,6 +119,9 @@ Route::group([
     Route::get('/trademark/index',[UserController::class,'index_trademarks']);
 
     Route::get('/trademark/{user_id}',[UserController::class,'show_trademark']);
+
+    // Representative
+    Route::get('/representative/index',[RepresentativeController::class,'index']);
     
 });
 
@@ -162,8 +165,6 @@ Route::middleware(
     Route::post('/representative/create',[RepresentativeController::class,'create']);
 
     Route::put('/representative/{representative_id}/edit',[RepresentativeController::class,'edit']);
-
-    Route::get('/representative/index',[RepresentativeController::class,'index']);
 
     Route::get('/representative/{representative_id}',[RepresentativeController::class,'show']);
 

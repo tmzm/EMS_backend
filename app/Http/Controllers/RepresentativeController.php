@@ -24,7 +24,7 @@ class RepresentativeController extends Controller
 
     public function index(Request $request)
     {
-        self::ok(Representative::latest()->where('user_id',$request->user()->id)->get());
+        self::ok(Representative::latest()->where('user_id',isset($request['user_id']) ? $request['user_id'] : $request->user()->id)->get());
     }
 
     public function edit(RepresentativeEditRequest $request, $representative_id)
