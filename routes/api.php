@@ -172,6 +172,9 @@ Route::middleware(
 
     // Reports
     Route::post('/report/create',[ReportController::class,'create']);
+
+    // pay an invoice
+    Route::post('/invoice/{invoice_id}/pay',[InvoiceController::class,'pay']);
 });
 
 // Admin APIs
@@ -212,9 +215,6 @@ Route::middleware(
 
     // accept user
     Route::post('/user/{user_id}/accept',[UserController::class,'accept_trademark']);
-
-    // pay an invoice
-    Route::post('/invoice/{invoice_id}/pay',[InvoiceController::class,'pay']);
 
     // Transfer
     Route::post('/transfer/create', [TransferController::class,'create']);
