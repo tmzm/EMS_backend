@@ -15,12 +15,12 @@ class ExhibitionParticipate extends Model
 
     public function exhibition_participate_products()
     {
-        return $this->hasMany(ExhibitionParticipateProduct::class);
+        return $this->hasMany(ExhibitionParticipateProduct::class,'participate_id');
     }
 
     public function exhibition_participate_representatives()
     {
-        return $this->hasMany(ExhibitionParticipateRepresentative::class);
+        return $this->hasMany(ExhibitionParticipateRepresentative::class,'participate_id');
     }
 
 
